@@ -1,6 +1,10 @@
-import React , {useState} from 'react';
+import React , {useState, useEffect} from 'react';
 import {AiOutlinePlus} from 'react-icons/ai'
 import Todo from './components/Todo';
+import {db} from './firebase';
+import {query,collection, onSnapshot, QuerySnapshot} from 'firebase/firestore';
+
+
 
 
 
@@ -18,6 +22,22 @@ count: `text-center p-2`
 function App() {
 
   const [todos, setTodos] = useState(['Learn React','Daily Coding Challenges'])
+
+// Create todo
+// Read todo  from firebase 
+useEffect(()=>{
+  const q = query(collection(db,'reactTodos'))
+  const unsubscribe = onSnapshot(q,(querySnapshot) =>{
+    let todoArr = []
+    querySnapshot.forEach((doc)=>{
+      todoArr.push({...doc.data(), id:doc.id})
+    })
+  })
+},[])
+
+// Update todo in firebase 
+// Delete todo
+
 
   return (
     <div className={style.bg}>
